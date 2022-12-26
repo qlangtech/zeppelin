@@ -17,46 +17,48 @@
 
 package org.apache.zeppelin.server;
 
-import org.glassfish.hk2.api.ActiveDescriptor;
-import org.glassfish.hk2.utilities.ImmediateErrorHandler;
-import javax.inject.Singleton;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.inject.Singleton;
+
+import org.glassfish.hk2.api.ActiveDescriptor;
+import org.glassfish.hk2.utilities.ImmediateErrorHandler;
 
 /**
  * ImmediateErrorHandlerImpl to catch exception
  */
 @Singleton
 public class ImmediateErrorHandlerImpl implements ImmediateErrorHandler {
-  private final List<ErrorData> constructionErrors = new LinkedList<>();
-  private final List<ErrorData> destructionErrors = new LinkedList<>();
+    private final List<ErrorData> constructionErrors = new LinkedList<>();
+    private final List<ErrorData> destructionErrors = new LinkedList<>();
 
-  @Override
-  public void postConstructFailed(ActiveDescriptor<?> immediateService, Throwable exception) {
-    synchronized (this) {
-      constructionErrors.add(new ErrorData(immediateService, exception));
-      this.notifyAll();
+    @Override
+    public void postConstructFailed(ActiveDescriptor<?> immediateService, Throwable exception) {
+        synchronized (this) {
+            constructionErrors.add(new ErrorData(immediateService, exception));
+            this.notifyAll();
+        }
     }
-  }
 
-  @Override
-  public void preDestroyFailed(ActiveDescriptor<?> immediateService, Throwable exception) {
-    synchronized (this) {
-      destructionErrors.add(new ErrorData(immediateService, exception));
-      this.notifyAll();
+    @Override
+    public void preDestroyFailed(ActiveDescriptor<?> immediateService, Throwable exception) {
+        synchronized (this) {
+            destructionErrors.add(new ErrorData(immediateService, exception));
+            this.notifyAll();
+        }
     }
-  }
 
-  List<ErrorData> waitForAtLeastOneConstructionError(long waitTime) throws InterruptedException {
-    synchronized (this) {
-      while (constructionErrors.size() <= 0 && waitTime > 0) {
-        long currentTime = System.currentTimeMillis();
-        wait(waitTime);
-        long elapsedTime = System.currentTimeMillis() - currentTime;
-        waitTime -= elapsedTime;
-      }
-      return new LinkedList<>(constructionErrors);
+    public List<ErrorData> waitForAtLeastOneConstructionError(long waitTime) throws InterruptedException {
+        synchronized (this) {
+            while (constructionErrors.size() <= 0 && waitTime > 0) {
+                long currentTime = System.currentTimeMillis();
+                wait(waitTime);
+                long elapsedTime = System.currentTimeMillis() - currentTime;
+                waitTime -= elapsedTime;
+            }
+            return new LinkedList<>(constructionErrors);
+        }
     }
-  }
 
 }

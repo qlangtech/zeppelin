@@ -265,13 +265,13 @@ public class NotebookServer extends WebSocketServlet
         LOG.debug("{} message: invalid ticket {}", receivedMessage.op, receivedMessage.ticket);
         return;
       } else if (!ticketEntry.getTicket().equals(receivedMessage.ticket)) {
-        /* not to pollute logs, log instead of exception */
-        LOG.debug("{} message: invalid ticket {} != {}", receivedMessage.op, receivedMessage.ticket, ticketEntry.getTicket());
-        if (!receivedMessage.op.equals(OP.PING)) {
-          conn.send(serializeMessage(new Message(OP.SESSION_LOGOUT).put("info", "Your ticket is invalid possibly due to server restart. Please login again.")));
-        }
-
-        return;
+//        /* not to pollute logs, log instead of exception */
+//        LOG.debug("{} message: invalid ticket {} != {}", receivedMessage.op, receivedMessage.ticket, ticketEntry.getTicket());
+//        if (!receivedMessage.op.equals(OP.PING)) {
+//          conn.send(serializeMessage(new Message(OP.SESSION_LOGOUT).put("info", "Your ticket is invalid possibly due to server restart. Please login again.")));
+//        }
+//
+//        return;
       }
 
       ZeppelinConfiguration conf = ZeppelinConfiguration.create();

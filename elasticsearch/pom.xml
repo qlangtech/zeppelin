@@ -74,7 +74,7 @@
       <artifactId>json-flattener</artifactId>
       <version>${json-flattener.version}</version>
     </dependency>
-    
+
     <dependency>
       <groupId>com.mashape.unirest</groupId>
       <artifactId>unirest-java</artifactId>
@@ -93,6 +93,11 @@
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>none</phase>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
