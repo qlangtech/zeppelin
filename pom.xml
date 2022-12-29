@@ -991,13 +991,13 @@
                 <groupId>com.qlangtech.tis</groupId>
                 <artifactId>tis-plugin</artifactId>
                 <version>${tis.version}</version>
-                <scope>provided</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                    </exclusion>
-                </exclusions>
+                <scope>compile</scope>
+<!--                <exclusions>-->
+<!--                    <exclusion>-->
+<!--                        <groupId>com.google.guava</groupId>-->
+<!--                        <artifactId>guava</artifactId>-->
+<!--                    </exclusion>-->
+<!--                </exclusions>-->
             </dependency>
         </dependencies>
     </dependencyManagement>

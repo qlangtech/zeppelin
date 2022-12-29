@@ -1,5 +1,9 @@
 package org.apache.zeppelin.client;
 
+import org.apache.zeppelin.common.NotebookInfo;
+
+import java.util.List;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -26,6 +30,15 @@ public class ZeppelinClientTest {
     @Test
     public void testDeleteInterpreter() throws Exception {
         zeppelinClient.deleteInterpreter("order3");
+    }
+
+
+    @Test
+    public void testNoteList() throws Exception {
+        List<NotebookInfo> notebookInfos = zeppelinClient.listNotes();
+        for (NotebookInfo note : notebookInfos) {
+            System.out.println(note.getId() + " path:" + note.getPath());
+        }
     }
 
     @Test

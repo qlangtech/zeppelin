@@ -23,6 +23,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.zeppelin.common.NotebookInfo;
 import org.apache.zeppelin.common.SessionInfo;
 
 import java.security.cert.X509Certificate;
@@ -288,6 +289,23 @@ public class ZeppelinClient {
 //            paragraphs.put(p);
 //            json.put("paragraphs", paragraphs);
         });
+    }
+
+    public List<NotebookInfo> listNotes() throws Exception {
+        GetRequest getRequest = Unirest.get("/notebook");
+        HttpResponse<JsonNode> response = getRequest.asJson();
+        checkResponse(response);
+        JsonNode jsonNode = response.getBody();
+        checkJsonNodeStatus(jsonNode);
+        JSONArray notebooksJsonArray = jsonNode.getObject().getJSONArray("body");
+        List<NotebookInfo> notes = new ArrayList<>();
+        JSONObject note = null;
+        for (int i = 0; i < notebooksJsonArray.length(); ++i) {
+            note = notebooksJsonArray.getJSONObject(i);
+
+            notes.add(new NotebookInfo(note.getString("id"), note.getString("path")));
+        }
+        return notes;
     }
 
     /**
