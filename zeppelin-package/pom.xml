@@ -43,7 +43,6 @@
                     <descriptor>./assembly.xml</descriptor>
                     <outputDirectory>./</outputDirectory>
                     <finalName>zeppelin-interpreter</finalName>
-                    <appendDeplpyFileName>zeppelin-interpreter.tar.gz</appendDeplpyFileName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <tarLongFileMode>posix</tarLongFileMode>
                     <appnamePattern>zeppelin-interpreter</appnamePattern>
