@@ -28,7 +28,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>zeppelin-client</artifactId>
+    <artifactId>zeppelin-client-tis-${tis.version}</artifactId>
     <packaging>jar</packaging>
     <name>Zeppelin: Client</name>
     <description>Zeppelin Client</description>
