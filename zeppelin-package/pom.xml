@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>zeppelin</artifactId>
+        <groupId>org.apache.zeppelin</groupId>
+        <version>0.10.2-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
+    <groupId>org.apache.zeppelin</groupId>
+    <artifactId>zeppelin-package</artifactId>
+    <properties>
+        <tisasm-maven-plugin.version>1.0.6</tisasm-maven-plugin.version>
+        <tisasm.oss.put.skip>true</tisasm.oss.put.skip>
+    </properties>
+
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.zeppelin</groupId>
+            <artifactId>elasticsearch-tis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.zeppelin</groupId>
+            <artifactId>jdbc-tis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>com.qlangtech.tis</groupId>
+                <artifactId>tisasm-maven-plugin</artifactId>
+                <configuration>
+                    <descriptor>./assembly.xml</descriptor>
+                    <outputDirectory>../</outputDirectory>
+                    <finalName>zeppelin-interpreter</finalName>
+                    <appendDeplpyFileName>zeppelin-interpreter.tar.gz</appendDeplpyFileName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <tarLongFileMode>posix</tarLongFileMode>
+                    <appnamePattern>zeppelin-interpreter</appnamePattern>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.qlangtech.tis</groupId>
+                    <artifactId>tisasm-maven-plugin</artifactId>
+                    <version>${tisasm-maven-plugin.version}</version>
+                    <configuration>
+                        <skip>${tisasm.oss.put.skip}</skip>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>make-assembly</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>tisasm</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>make-deploy</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>put</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+
+        </pluginManagement>
+    </build>
+
+
+</project>
