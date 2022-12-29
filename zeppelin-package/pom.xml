@@ -11,18 +11,18 @@
     <packaging>jar</packaging>
     <groupId>org.apache.zeppelin</groupId>
     <artifactId>zeppelin-package</artifactId>
+    <version>${tis.version}</version>
     <properties>
         <tisasm-maven-plugin.version>1.0.6</tisasm-maven-plugin.version>
         <tisasm.oss.put.skip>true</tisasm.oss.put.skip>
     </properties>
 
 
-
     <dependencies>
         <dependency>
             <groupId>org.apache.zeppelin</groupId>
             <artifactId>elasticsearch-tis</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
