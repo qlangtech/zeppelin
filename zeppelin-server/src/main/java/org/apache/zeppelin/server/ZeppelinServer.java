@@ -18,6 +18,7 @@ package org.apache.zeppelin.server;
 
 import static org.apache.zeppelin.server.HtmlAddonResource.HTML_ADDON_IDENTIFIER;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.web.env.EnvironmentLoaderListener;
 import org.apache.shiro.web.servlet.ShiroFilter;
@@ -76,9 +77,11 @@ import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.security.GeneralSecurityException;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -224,9 +227,17 @@ public class ZeppelinServer extends ResourceConfig {
                     }
                 });
 
+        final File zeppelinHome = new File(conf.getZeppelinHome());
+        Collection<File> wars = FileUtils.listFiles(zeppelinHome, new String[]{"war"}, false);
+        Optional<File> angularWar = wars.stream().filter((w) -> StringUtils.startsWith(w.getName(), "zeppelin-web-angular")).findFirst();
+        if (!angularWar.isPresent()) {
+            throw new IllegalStateException("can not find zeppelin-web-angular in:" + zeppelinHome);
+        }
+
         // Multiple Web UI
         // final WebAppContext defaultWebApp = setupWebAppContext(contexts, conf, conf.getString(ConfVars.ZEPPELIN_WAR), conf.getServerContextPath());
-        final WebAppContext nextWebApp = setupWebAppContext(contexts, conf, conf.getString(ConfVars.ZEPPELIN_ANGULAR_WAR), WEB_APP_CONTEXT_NEXT);
+        //conf.getString(ConfVars.ZEPPELIN_ANGULAR_WAR)
+        final WebAppContext nextWebApp = setupWebAppContext(contexts, conf, angularWar.get().getAbsolutePath(), WEB_APP_CONTEXT_NEXT);
 
         //  initWebApp(defaultWebApp);
         initWebApp(nextWebApp);
