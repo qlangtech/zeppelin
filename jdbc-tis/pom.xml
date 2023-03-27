@@ -28,6 +28,7 @@
         <dependency>
             <groupId>com.qlangtech.tis</groupId>
             <artifactId>tis-plugin</artifactId>
+            <version>${tis.version}</version>
         </dependency>
 
     </dependencies>
