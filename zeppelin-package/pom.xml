@@ -8,13 +8,15 @@
         <version>0.10.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <groupId>org.apache.zeppelin</groupId>
     <artifactId>zeppelin-package</artifactId>
     <version>${tis.version}</version>
     <properties>
         <tisasm-maven-plugin.version>1.0.6</tisasm-maven-plugin.version>
         <tisasm.oss.put.skip>true</tisasm.oss.put.skip>
+        <tis.release.repository.host>http://tis-release.oss-cn-beijing.aliyuncs.com</tis.release.repository.host>
+        <zeppelin.raw.package.name>zeppelin-0.10.1-bin-all</zeppelin.raw.package.name>
     </properties>
 
 
@@ -40,12 +42,8 @@
                 <groupId>com.qlangtech.tis</groupId>
                 <artifactId>tisasm-maven-plugin</artifactId>
                 <configuration>
-                    <descriptor>./assembly.xml</descriptor>
-                    <outputDirectory>./</outputDirectory>
-                    <finalName>zeppelin-interpreter</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <tarLongFileMode>posix</tarLongFileMode>
-                    <appnamePattern>zeppelin-interpreter</appnamePattern>
+                    <outputDirectory>${project.build.directory}/</outputDirectory>
+                    <finalName>tis-${zeppelin.raw.package.name}</finalName>
                 </configuration>
             </plugin>
             <plugin>
@@ -54,6 +52,45 @@
                     <execution>
                         <id>enforce</id>
                         <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <target>
+                                <!--                                <untar src="${project.basedir}/../tis-datax-hudi-dependency/tis-datax-hudi-dependency.tar.gz"-->
+                                <!--                                       dest="${project.build.directory}/${project.build.finalName}"-->
+                                <!--                                       overwrite="true"-->
+                                <!--                                       compression="gzip"/>-->
+                                <mkdir dir="/tmp/tis"/>
+                                <get src="${tis.release.repository.host}/${zeppelin.raw.package.name}.tgz"
+                                     dest="/tmp/tis/${zeppelin.raw.package.name}.tgz" skipexisting="true"
+                                     ignoreerrors="false"/>
+                                <untar src="/tmp/tis/${zeppelin.raw.package.name}.tgz"
+                                       dest="${project.build.directory}/${project.build.finalName}"
+                                       overwrite="true"
+                                       compression="none"/>
+                                <copydir src="${project.basedir}/../interpreter"
+                                         dest="${project.build.directory}/${project.build.finalName}/${zeppelin.raw.package.name}/interpreter"/>
+
+                                <tar destfile="${project.build.directory}/tis-${zeppelin.raw.package.name}.tar.gz"
+                                     basedir="${project.build.directory}/${project.build.finalName}/${zeppelin.raw.package.name}"
+                                     compression="gzip"/>
+                                <delete dir="${project.build.directory}/${project.build.finalName}">
+
+                                </delete>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -72,7 +109,7 @@
                     <executions>
                         <execution>
                             <id>make-assembly</id>
-                            <phase>package</phase>
+                            <phase>none</phase>
                             <goals>
                                 <goal>tisasm</goal>
                             </goals>
