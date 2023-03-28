@@ -13,8 +13,8 @@
     <artifactId>zeppelin-package</artifactId>
     <version>${tis.version}</version>
     <properties>
-        <tisasm-maven-plugin.version>1.0.6</tisasm-maven-plugin.version>
-        <tisasm.oss.put.skip>true</tisasm.oss.put.skip>
+
+
         <tis.release.repository.host>http://tis-release.oss-cn-beijing.aliyuncs.com</tis.release.repository.host>
         <zeppelin.raw.package.name>zeppelin-0.10.1-bin-all</zeppelin.raw.package.name>
     </properties>
@@ -97,35 +97,7 @@
         </plugins>
 
 
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.qlangtech.tis</groupId>
-                    <artifactId>tisasm-maven-plugin</artifactId>
-                    <version>${tisasm-maven-plugin.version}</version>
-                    <configuration>
-                        <skip>${tisasm.oss.put.skip}</skip>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>make-assembly</id>
-                            <phase>none</phase>
-                            <goals>
-                                <goal>tisasm</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>make-deploy</id>
-                            <phase>deploy</phase>
-                            <goals>
-                                <goal>put</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
 
-        </pluginManagement>
     </build>
 
 

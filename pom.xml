@@ -106,6 +106,8 @@
         <module>jdbc-tis</module>
         <module>elasticsearch-tis</module>
         <module>zeppelin-package</module>
+        <module>tis-zeppelin</module>
+
     </modules>
 
     <properties>
@@ -217,6 +219,8 @@
         <tests.to.exclude/>
 
         <tis.version>3.7.1</tis.version>
+        <tisasm.oss.put.skip>true</tisasm.oss.put.skip>
+        <tisasm-maven-plugin.version>1.0.6</tisasm-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -993,12 +997,12 @@
                 <artifactId>tis-plugin</artifactId>
                 <version>${tis.version}</version>
                 <scope>compile</scope>
-<!--                <exclusions>-->
-<!--                    <exclusion>-->
-<!--                        <groupId>com.google.guava</groupId>-->
-<!--                        <artifactId>guava</artifactId>-->
-<!--                    </exclusion>-->
-<!--                </exclusions>-->
+                <!--                <exclusions>-->
+                <!--                    <exclusion>-->
+                <!--                        <groupId>com.google.guava</groupId>-->
+                <!--                        <artifactId>guava</artifactId>-->
+                <!--                    </exclusion>-->
+                <!--                </exclusions>-->
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -1176,6 +1180,7 @@
                 <executions>
                     <execution>
                         <id>enforce</id>
+
                         <configuration>
                             <rules>
                                 <DependencyConvergence/>
@@ -1559,6 +1564,31 @@
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
                     <version>${plugin.rat.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.qlangtech.tis</groupId>
+                    <artifactId>tisasm-maven-plugin</artifactId>
+                    <version>${tisasm-maven-plugin.version}</version>
+                    <configuration>
+                        <skip>${tisasm.oss.put.skip}</skip>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>make-assembly</id>
+                            <phase>none</phase>
+                            <goals>
+                                <goal>tisasm</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>make-deploy</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>put</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
 
             </plugins>
