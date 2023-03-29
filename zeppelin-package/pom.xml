@@ -80,7 +80,7 @@
                                 <copydir src="${project.basedir}/../interpreter"
                                          dest="${project.build.directory}/${project.build.finalName}/${zeppelin.raw.package.name}/interpreter"/>
 
-                                <tar destfile="${project.build.directory}/tis-${zeppelin.raw.package.name}.tar.gz"
+                                <tar destfile="${project.basedir}/../tis-${zeppelin.raw.package.name}.tar.gz"
                                      basedir="${project.build.directory}/${project.build.finalName}/${zeppelin.raw.package.name}"
                                      compression="gzip"/>
                                 <delete dir="${project.build.directory}/${project.build.finalName}">

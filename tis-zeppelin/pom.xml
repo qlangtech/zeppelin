@@ -96,6 +96,7 @@
                 <artifactId>tisasm-maven-plugin</artifactId>
                 <executions>
                     <execution>
+
                         <id>make-assembly</id>
                         <phase>package</phase>
                     </execution>
