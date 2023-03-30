@@ -81,8 +81,13 @@
                                          dest="${project.build.directory}/${project.build.finalName}/${zeppelin.raw.package.name}/interpreter"/>
 
                                 <tar destfile="${project.basedir}/../tis-${zeppelin.raw.package.name}.tar.gz"
-                                     basedir="${project.build.directory}/${project.build.finalName}/${zeppelin.raw.package.name}"
-                                     compression="gzip"/>
+                                     compression="gzip"
+                                     longfile="gnu">
+                                    <tarfileset dir="${project.build.directory}/${project.build.finalName}/${zeppelin.raw.package.name}"
+                                                prefix="/${zeppelin.raw.package.name}"
+                                                preserveLeadingSlashes="true">
+                                    </tarfileset>
+                                </tar>
                                 <delete dir="${project.build.directory}/${project.build.finalName}">
 
                                 </delete>
