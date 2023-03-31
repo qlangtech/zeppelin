@@ -18,15 +18,15 @@ package com.qlangtech.tis.zeppelin;
  * limitations under the License.
  */
 
-import com.qlangtech.tis.web.start.IWebAppContextCollector;
-import com.qlangtech.tis.web.start.TisApp;
-import com.qlangtech.tis.web.start.TisAppLaunch;
-import com.qlangtech.tis.web.start.TisSubModule;
 import org.apache.zeppelin.conf.ZeppelinConfiguration;
 import org.apache.zeppelin.notebook.repo.NotebookRepoSync;
 import org.apache.zeppelin.server.ErrorData;
 import org.apache.zeppelin.server.ImmediateErrorHandlerImpl;
 import org.apache.zeppelin.server.ZeppelinServer;
+
+import java.io.IOException;
+import java.util.List;
+
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.api.ServiceLocatorFactory;
@@ -34,8 +34,10 @@ import org.glassfish.hk2.utilities.ServiceLocatorUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.List;
+import com.qlangtech.tis.web.start.IWebAppContextCollector;
+import com.qlangtech.tis.web.start.TisApp;
+import com.qlangtech.tis.web.start.TisAppLaunch;
+import com.qlangtech.tis.web.start.TisSubModule;
 
 /**
  * @author: 百岁（baisui@qlangtech.com）
@@ -98,6 +100,8 @@ public class ZeppelinServerLauncher implements IWebAppContextCollector {
     }
 
     public static void main(String[] args) throws Exception {
+
+
         ZeppelinServerLauncher zeppelinServer = new ZeppelinServerLauncher();
 
         TisAppLaunch.setTest(true);
