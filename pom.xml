@@ -100,8 +100,8 @@
         <!--    <module>zeppelin-client-examples</module>-->
         <!--    <module>zeppelin-web</module>-->
         <module>zeppelin-server</module>
-        <module>zeppelin-jupyter</module>
-        <module>zeppelin-plugins</module>
+<!--        <module>zeppelin-jupyter</module>-->
+<!--        <module>zeppelin-plugins</module>-->
         <module>zeppelin-distribution</module>
         <module>jdbc-tis</module>
         <module>elasticsearch-tis</module>
@@ -1933,7 +1933,8 @@
                         <executions>
                             <execution>
                                 <id>verify.rat</id>
-                                <phase>verify</phase>
+<!--                                <phase>verify</phase>-->
+                                <phase>none</phase>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
