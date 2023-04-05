@@ -92,6 +92,13 @@
                                     <tarfileset
                                             dir="${project.build.directory}/zeppelin-${project.parent.version}"
                                             prefix="/${zeppelin.raw.package.name}"
+                                            excludes="bin/*"
+                                            preserveLeadingSlashes="true">
+                                    </tarfileset>
+                                    <tarfileset
+                                            dir="${project.build.directory}/zeppelin-${project.parent.version}/bin"
+                                            prefix="/${zeppelin.raw.package.name}/bin"
+                                            filemode="744"
                                             preserveLeadingSlashes="true">
                                     </tarfileset>
                                 </tar>
