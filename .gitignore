@@ -50,7 +50,8 @@ zeppelin-web/bower_components
 zeppelin-web/yarn.lock
 **nbproject/
 **node/
-
+dist
+tis-zeppelin/notebook
 # R
 /r/lib/
 .Rhistory

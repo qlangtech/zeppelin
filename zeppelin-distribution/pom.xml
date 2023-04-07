@@ -113,8 +113,8 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <!--<finalName>${project.parent.artifactId}-${project.version}</finalName>-->
-                    <finalName>${zeppelin.distribution.assemble}</finalName>
+                    <finalName>${project.parent.artifactId}-${project.version}</finalName>
+<!--                    <finalName>${zeppelin.distribution.assemble}</finalName>-->
 
 
                     <appendAssemblyId>false</appendAssemblyId>
