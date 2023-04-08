@@ -708,7 +708,7 @@ public class InterpreterSetting {
     }
 
     void setInterpreterOption(InterpreterOption interpreterOption) {
-        this.option = interpreterOption;
+        this.option = Objects.requireNonNull(interpreterOption, "param option can not be null");
     }
 
     public void setProperties(Properties p) {
