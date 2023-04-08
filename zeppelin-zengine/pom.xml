@@ -50,7 +50,6 @@
     <dependency>
       <groupId>com.qlangtech.tis</groupId>
       <artifactId>tis-builder-api</artifactId>
-      <scope>compile</scope>
     </dependency>
 
     <dependency>
