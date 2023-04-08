@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.qlangtech.tis.TIS;
+import com.qlangtech.tis.manage.common.Config;
 import com.qlangtech.tis.plugin.ds.DBConfig;
 import com.qlangtech.tis.plugin.ds.DataSourceFactory;
 import com.qlangtech.tis.plugin.ds.DataSourceFactoryPluginStore;
@@ -99,7 +100,8 @@ public class TISJDBCInterpreter extends JDBCInterpreter {
             }
             DataSourceFactoryPluginStore dsStore = TIS.getDataSourceFactoryPluginStore(PostedDSProp.parse(tisDbName));
             DataSourceFactory dsFactory = dsStore.getPlugin();
-            Objects.requireNonNull(dsFactory, "dsFactory can not be null");
+
+            Objects.requireNonNull(dsFactory, "dbName:" + tisDbName + " relevant dsFactory can not be null,dataDir:" + Config.getDataDir().getAbsolutePath());
             List<String> jdbcUrls = Lists.newArrayList();
             DBConfig dbConfig = dsFactory.getDbConfig();
             dbConfig.vistDbURL(false, (dbName, dbHost, jdbcUrl) -> {

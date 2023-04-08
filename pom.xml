@@ -100,8 +100,8 @@
         <!--    <module>zeppelin-client-examples</module>-->
         <!--    <module>zeppelin-web</module>-->
         <module>zeppelin-server</module>
-<!--        <module>zeppelin-jupyter</module>-->
-<!--        <module>zeppelin-plugins</module>-->
+        <!--        <module>zeppelin-jupyter</module>-->
+        <!--        <module>zeppelin-plugins</module>-->
         <module>zeppelin-distribution</module>
         <module>jdbc-tis</module>
         <module>elasticsearch-tis</module>
@@ -1004,6 +1004,16 @@
                 <!--                    </exclusion>-->
                 <!--                </exclusions>-->
             </dependency>
+
+
+            <dependency>
+                <groupId>com.qlangtech.tis</groupId>
+                <artifactId>tis-builder-api</artifactId>
+                <version>${tis.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
@@ -1933,7 +1943,7 @@
                         <executions>
                             <execution>
                                 <id>verify.rat</id>
-<!--                                <phase>verify</phase>-->
+                                <!--                                <phase>verify</phase>-->
                                 <phase>none</phase>
                                 <goals>
                                     <goal>check</goal>
