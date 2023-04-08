@@ -143,7 +143,6 @@ public class InterpreterRestApi {
             // baisui add for nullable param option judgement
             InterpreterOption interpreterOption = request.getOption() == null ? new InterpreterOption() : request.getOption();
 
-
             InterpreterSetting interpreterSetting = interpreterSettingManager
                     .createNewSetting(request.getName(), request.getGroup(), request.getDependencies(),
                             interpreterOption, request.getProperties());
