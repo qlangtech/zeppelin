@@ -140,10 +140,13 @@ public class InterpreterRestApi {
                 return new JsonResponse<>(Status.BAD_REQUEST).build();
             }
 
+            // baisui add for nullable param option judgement
+            InterpreterOption interpreterOption = request.getOption() == null ? new InterpreterOption() : request.getOption();
+
 
             InterpreterSetting interpreterSetting = interpreterSettingManager
                     .createNewSetting(request.getName(), request.getGroup(), request.getDependencies(),
-                            (request.getOption() == null ? new InterpreterOption() : request.getOption()), request.getProperties());
+                            interpreterOption, request.getProperties());
             LOGGER.info("new setting created with {}", interpreterSetting.getId());
             return new JsonResponse<>(Status.OK, "", interpreterSetting).build();
         } catch (IOException e) {
