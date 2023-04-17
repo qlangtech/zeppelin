@@ -104,7 +104,7 @@ public class TISJDBCInterpreter extends JDBCInterpreter {
             Objects.requireNonNull(dsFactory, "dbName:" + tisDbName + " relevant dsFactory can not be null,dataDir:" + Config.getDataDir().getAbsolutePath());
             List<String> jdbcUrls = Lists.newArrayList();
             DBConfig dbConfig = dsFactory.getDbConfig();
-            dbConfig.vistDbURL(false, (dbName, dbHost, jdbcUrl) -> {
+            dbConfig.vistDbURL(false, DBConfig.expireSec, (dbName, dbHost, jdbcUrl) -> {
                 jdbcUrls.add(jdbcUrl);
             }, false);
 
