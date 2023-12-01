@@ -813,6 +813,7 @@ public class ZeppelinClient {
         JSONObject bodyObject = new JSONObject();
         bodyObject.put("name", getInterpreterName(name));
         bodyObject.put("group", group.getGroupName());
+
         JSONObject props = new JSONObject();
 
 //        val.put("name", "default.url");

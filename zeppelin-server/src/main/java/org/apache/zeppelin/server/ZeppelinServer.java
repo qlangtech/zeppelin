@@ -712,9 +712,22 @@ public class ZeppelinServer extends ResourceConfig {
         webapp.addServlet(new ServletHolder(new PingServlet()), "/ping");
     }
 
+    /**
+     * // @see TisApp.initZeppelinContext() 中设置了 Thread.currentClassloader classolader
+     *
+     * @param contexts
+     * @param conf
+     * @param warPath
+     * @param contextPath
+     * @return
+     */
     private static WebAppContext setupWebAppContext(
             HandlerCollection contexts, ZeppelinConfiguration conf, String warPath, String contextPath) {
         WebAppContext webApp = new WebAppContext();
+        /*******************************************************************************
+         * TisApp.initZeppelinContext() 中设置了 Thread.currentClassloader classolader
+         ******************************************************************************/
+        webApp.setClassLoader(Thread.currentThread().getContextClassLoader());
         webApp.setContextPath(contextPath);
         LOG.info("warPath is: {}", warPath);
         File warFile = new File(warPath);

@@ -3,33 +3,37 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>zeppelin</artifactId>
+        <artifactId>zeppelin-distribution</artifactId>
         <groupId>org.apache.zeppelin</groupId>
         <version>0.10.2-SNAPSHOT</version>
+        <relativePath>../zeppelin-distribution/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <groupId>org.apache.zeppelin</groupId>
     <artifactId>zeppelin-package</artifactId>
-    <version>${tis.version}</version>
+    <!--    <version>${tis.version}</version>-->
     <properties>
-        <tisasm-maven-plugin.version>1.0.6</tisasm-maven-plugin.version>
-        <tisasm.oss.put.skip>true</tisasm.oss.put.skip>
+
+
+        <tis.release.repository.host>http://tis-release.oss-cn-beijing.aliyuncs.com</tis.release.repository.host>
+        <zeppelin.raw.package.name>zeppelin-0.10.1-bin-all</zeppelin.raw.package.name>
+        <zeppelin.web.angular.war>zeppelin-web-angular-0.10.1.war</zeppelin.web.angular.war>
     </properties>
 
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.zeppelin</groupId>
-            <artifactId>elasticsearch-tis</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.zeppelin</groupId>-->
+        <!--            <artifactId>zeppelin-distribution</artifactId>-->
+        <!--            <version>${project.parent.version}</version>-->
+        <!--        </dependency>-->
 
-        <dependency>
-            <groupId>org.apache.zeppelin</groupId>
-            <artifactId>jdbc-tis</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.zeppelin</groupId>-->
+        <!--            <artifactId>jdbc-tis</artifactId>-->
+        <!--            <version>${project.parent.version}</version>-->
+        <!--        </dependency>-->
 
     </dependencies>
 
@@ -40,12 +44,8 @@
                 <groupId>com.qlangtech.tis</groupId>
                 <artifactId>tisasm-maven-plugin</artifactId>
                 <configuration>
-                    <descriptor>./assembly.xml</descriptor>
-                    <outputDirectory>./</outputDirectory>
-                    <finalName>zeppelin-interpreter</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <tarLongFileMode>posix</tarLongFileMode>
-                    <appnamePattern>zeppelin-interpreter</appnamePattern>
+                    <outputDirectory>${project.build.directory}/</outputDirectory>
+                    <finalName>tis-${zeppelin.raw.package.name}</finalName>
                 </configuration>
             </plugin>
             <plugin>
@@ -57,38 +57,75 @@
                     </execution>
                 </executions>
             </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <target>
+                                <!--                                <untar src="${project.basedir}/../tis-datax-hudi-dependency/tis-datax-hudi-dependency.tar.gz"-->
+                                <!--                                       dest="${project.build.directory}/${project.build.finalName}"-->
+                                <!--                                       overwrite="true"-->
+                                <!--                                       compression="gzip"/>-->
+                                <mkdir dir="/tmp/tis"/>
+                                <get src="${tis.release.repository.host}/${zeppelin.web.angular.war}"
+                                     dest="/tmp/tis/${zeppelin.web.angular.war}" skipexisting="true"
+                                     ignoreerrors="false"/>
+
+                                <!---->
+                                <untar src="${project.basedir}/../${project.parent.artifactId}/target/zeppelin-${project.parent.version}.tar.gz"
+                                       dest="${project.build.directory}" overwrite="true" compression="gzip"/>
+
+                                <copy file="/tmp/tis/${zeppelin.web.angular.war}"
+                                      todir="${project.build.directory}/zeppelin-${project.parent.version}"/>
+
+                                <copydir src="${project.basedir}/../interpreter"
+                                         dest="${project.build.directory}/zeppelin-${project.parent.version}/interpreter"/>
+
+                                <tar destfile="${project.basedir}/../tis-${zeppelin.raw.package.name}.tar.gz"
+                                     compression="gzip"
+                                     longfile="gnu">
+                                    <tarfileset
+                                            dir="${project.build.directory}/zeppelin-${project.parent.version}"
+                                            prefix="/${zeppelin.raw.package.name}"
+                                            excludes="bin/*"
+                                            preserveLeadingSlashes="true">
+                                    </tarfileset>
+                                    <tarfileset
+                                            dir="${project.build.directory}/zeppelin-${project.parent.version}/bin"
+                                            prefix="/${zeppelin.raw.package.name}/bin"
+                                            filemode="744"
+                                            preserveLeadingSlashes="true">
+                                    </tarfileset>
+                                </tar>
+                                <delete dir="${project.build.directory}/zeppelin-${project.parent.version}"/>
+
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
 
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.qlangtech.tis</groupId>
-                    <artifactId>tisasm-maven-plugin</artifactId>
-                    <version>${tisasm-maven-plugin.version}</version>
-                    <configuration>
-                        <skip>${tisasm.oss.put.skip}</skip>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>make-assembly</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>tisasm</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>make-deploy</id>
-                            <phase>deploy</phase>
-                            <goals>
-                                <goal>put</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-
-        </pluginManagement>
     </build>
 
 

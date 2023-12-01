@@ -27,69 +27,76 @@ import org.apache.zeppelin.interpreter.recovery.RecoveryStorage;
 import org.apache.zeppelin.interpreter.remote.ExecRemoteInterpreterProcess;
 import org.apache.zeppelin.interpreter.remote.RemoteInterpreterRunningProcess;
 import org.apache.zeppelin.interpreter.remote.RemoteInterpreterUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.qlangtech.tis.manage.common.Config;
 
 /**
  * Interpreter Launcher which use shell script to launch the interpreter process.
  */
 public class StandardInterpreterLauncher extends InterpreterLauncher {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(StandardInterpreterLauncher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StandardInterpreterLauncher.class);
 
-  public StandardInterpreterLauncher(ZeppelinConfiguration zConf, RecoveryStorage recoveryStorage) {
-    super(zConf, recoveryStorage);
-  }
-
-  @Override
-  public InterpreterClient launchDirectly(InterpreterLaunchContext context) throws IOException {
-    LOGGER.info("Launching new interpreter process of {}", context.getInterpreterSettingGroup());
-    this.properties = context.getProperties();
-    InterpreterOption option = context.getOption();
-    InterpreterRunner runner = context.getRunner();
-    String groupName = context.getInterpreterSettingGroup();
-    String name = context.getInterpreterSettingName();
-    int connectTimeout = getConnectTimeout();
-    int connectionPoolSize = getConnectPoolSize();
-
-    if (option.isExistingProcess()) {
-      return new RemoteInterpreterRunningProcess(
-          context.getInterpreterSettingName(),
-          context.getInterpreterGroupId(),
-          connectTimeout,
-          connectionPoolSize,
-          context.getIntpEventServerHost(),
-          context.getIntpEventServerPort(),
-          option.getHost(),
-          option.getPort(),
-          false);
-    } else {
-      // create new remote process
-      String localRepoPath = zConf.getInterpreterLocalRepoPath() + File.separator
-          + context.getInterpreterSettingId();
-      return new ExecRemoteInterpreterProcess(
-          context.getIntpEventServerPort(), context.getIntpEventServerHost(), zConf.getInterpreterPortRange(),
-          zConf.getInterpreterDir() + "/" + groupName, localRepoPath,
-          buildEnvFromProperties(context), connectTimeout, connectionPoolSize, name,
-          context.getInterpreterGroupId(), option.isUserImpersonate(),
-          runner != null ? runner.getPath() : zConf.getInterpreterRemoteRunnerPath());
+    public StandardInterpreterLauncher(ZeppelinConfiguration zConf, RecoveryStorage recoveryStorage) {
+        super(zConf, recoveryStorage);
     }
-  }
 
-  public Map<String, String> buildEnvFromProperties(InterpreterLaunchContext context) throws IOException {
-    Map<String, String> env = EnvironmentUtils.getProcEnvironment();
-    for (Map.Entry<Object,Object> entry : context.getProperties().entrySet()) {
-      String key = (String) entry.getKey();
-      String value = (String) entry.getValue();
-      if (RemoteInterpreterUtils.isEnvString(key) && !StringUtils.isBlank(value)) {
-        env.put(key, value);
-      }
+    @Override
+    public InterpreterClient launchDirectly(InterpreterLaunchContext context) throws IOException {
+        LOGGER.info("Launching new interpreter process of {}", context.getInterpreterSettingGroup());
+        this.properties = context.getProperties();
+        InterpreterOption option = context.getOption();
+        InterpreterRunner runner = context.getRunner();
+        String groupName = context.getInterpreterSettingGroup();
+        String name = context.getInterpreterSettingName();
+        int connectTimeout = getConnectTimeout();
+        int connectionPoolSize = getConnectPoolSize();
+
+        if (option.isExistingProcess()) {
+            return new RemoteInterpreterRunningProcess(
+                    context.getInterpreterSettingName(),
+                    context.getInterpreterGroupId(),
+                    connectTimeout,
+                    connectionPoolSize,
+                    context.getIntpEventServerHost(),
+                    context.getIntpEventServerPort(),
+                    option.getHost(),
+                    option.getPort(),
+                    false);
+        } else {
+            // create new remote process
+            String localRepoPath = zConf.getInterpreterLocalRepoPath() + File.separator
+                    + context.getInterpreterSettingId();
+            return new ExecRemoteInterpreterProcess(
+                    context.getIntpEventServerPort(), context.getIntpEventServerHost(), zConf.getInterpreterPortRange(),
+                    zConf.getInterpreterDir() + "/" + groupName, localRepoPath,
+                    buildEnvFromProperties(context), connectTimeout, connectionPoolSize, name,
+                    context.getInterpreterGroupId(), option.isUserImpersonate(),
+                    runner != null ? runner.getPath() : zConf.getInterpreterRemoteRunnerPath());
+        }
     }
-    env.put("INTERPRETER_GROUP_ID", context.getInterpreterGroupId());
-    return env;
-  }
+
+    public Map<String, String> buildEnvFromProperties(InterpreterLaunchContext context) throws IOException {
+        Map<String, String> env = EnvironmentUtils.getProcEnvironment();
+        for (Map.Entry<Object, Object> entry : context.getProperties().entrySet()) {
+            String key = (String) entry.getKey();
+            String value = (String) entry.getValue();
+            if (RemoteInterpreterUtils.isEnvString(key) && !StringUtils.isBlank(value)) {
+                env.put(key, value);
+            }
+        }
+        env.put("INTERPRETER_GROUP_ID", context.getInterpreterGroupId());
+
+        // baisui add from tis dataDir 20230408
+        env.put("ZEPPELIN_INTP_JAVA_OPTS", " -D" + Config.KEY_DATA_DIR + "=" + Config.getDataDir().getAbsolutePath());
+
+        return env;
+    }
 }

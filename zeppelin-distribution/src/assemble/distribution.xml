@@ -20,7 +20,7 @@
     xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
   <id>final-distribution</id>
   <formats>
-    <format>dir</format>
+<!--    <format>dir</format>-->
     <format>tar.gz</format>
     <!-- format>zip</format -->
   </formats>
@@ -83,11 +83,14 @@
     <fileSet>
       <directory>../interpreter</directory>
     </fileSet>
-    <fileSet>
-      <directory>../notebook</directory>
-    </fileSet>
+<!--    <fileSet>-->
+<!--      <directory>../notebook</directory>-->
+<!--    </fileSet>-->
     <fileSet>
       <directory>../plugins</directory>
+    </fileSet>
+    <fileSet>
+      <directory>../logs</directory>
     </fileSet>
     <fileSet>
       <directory>../k8s</directory>
@@ -95,17 +98,17 @@
     <fileSet>
       <directory>../scripts</directory>
     </fileSet>
-    <fileSet>
-      <outputDirectory>/lib/node_modules/zeppelin-vis</outputDirectory>
-      <directory>../zeppelin-web/src/app/visualization</directory>
-    </fileSet>
-    <fileSet>
-      <outputDirectory>/lib/node_modules/zeppelin-tabledata</outputDirectory>
-      <directory>../zeppelin-web/src/app/tabledata</directory>
-    </fileSet>
-    <fileSet>
-      <outputDirectory>/lib/node_modules/zeppelin-spell</outputDirectory>
-      <directory>../zeppelin-web/src/app/spell</directory>
-    </fileSet>
+<!--    <fileSet>-->
+<!--      <outputDirectory>/lib/node_modules/zeppelin-vis</outputDirectory>-->
+<!--      <directory>../zeppelin-web/src/app/visualization</directory>-->
+<!--    </fileSet>-->
+<!--    <fileSet>-->
+<!--      <outputDirectory>/lib/node_modules/zeppelin-tabledata</outputDirectory>-->
+<!--      <directory>../zeppelin-web/src/app/tabledata</directory>-->
+<!--    </fileSet>-->
+<!--    <fileSet>-->
+<!--      <outputDirectory>/lib/node_modules/zeppelin-spell</outputDirectory>-->
+<!--      <directory>../zeppelin-web/src/app/spell</directory>-->
+<!--    </fileSet>-->
   </fileSets>
 </assembly>

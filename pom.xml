@@ -27,11 +27,6 @@
         <version>2.0.5</version>
     </parent>
 
-<!--    <parent>-->
-<!--        <groupId>org.apache</groupId>-->
-<!--        <artifactId>apache</artifactId>-->
-<!--        <version>17</version>-->
-<!--    </parent>-->
 
     <groupId>org.apache.zeppelin</groupId>
     <artifactId>zeppelin</artifactId>
@@ -40,8 +35,7 @@
     <name>Zeppelin</name>
     <description>Zeppelin project</description>
     <url>https://zeppelin.apache.org</url>
-
-
+    
 
     <licenses>
         <license>
@@ -65,7 +59,7 @@
         <module>zeppelin-interpreter-shaded</module>
         <module>zeppelin-zengine</module>
         <module>zeppelin-display</module>
-        <module>rlang</module>
+<!--        <module>rlang</module>-->
         <!--    <module>zeppelin-jupyter-interpreter</module>-->
         <!--    <module>zeppelin-jupyter-interpreter-shaded</module>-->
         <!--    <module>kotlin</module>-->
@@ -108,12 +102,14 @@
         <!--    <module>zeppelin-client-examples</module>-->
         <!--    <module>zeppelin-web</module>-->
         <module>zeppelin-server</module>
-        <module>zeppelin-jupyter</module>
-        <module>zeppelin-plugins</module>
+                <module>zeppelin-jupyter</module>
+        <!--        <module>zeppelin-plugins</module>-->
         <module>zeppelin-distribution</module>
         <module>jdbc-tis</module>
         <module>elasticsearch-tis</module>
         <module>zeppelin-package</module>
+        <module>tis-zeppelin</module>
+
     </modules>
 
     <properties>
@@ -225,6 +221,9 @@
         <tests.to.exclude/>
 
         <tis.version>4.0.0</tis.version>
+        <tisasm.oss.put.skip>true</tisasm.oss.put.skip>
+        <tisasm-maven-plugin.version>1.0.6</tisasm-maven-plugin.version>
+
     </properties>
 
     <dependencyManagement>
@@ -1001,13 +1000,15 @@
                 <artifactId>tis-plugin</artifactId>
                 <version>${tis.version}</version>
                 <scope>compile</scope>
-<!--                <exclusions>-->
-<!--                    <exclusion>-->
-<!--                        <groupId>com.google.guava</groupId>-->
-<!--                        <artifactId>guava</artifactId>-->
-<!--                    </exclusion>-->
-<!--                </exclusions>-->
+                <!--                <exclusions>-->
+                <!--                    <exclusion>-->
+                <!--                        <groupId>com.google.guava</groupId>-->
+                <!--                        <artifactId>guava</artifactId>-->
+                <!--                    </exclusion>-->
+                <!--                </exclusions>-->
             </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
@@ -1184,6 +1185,7 @@
                 <executions>
                     <execution>
                         <id>enforce</id>
+
                         <configuration>
                             <rules>
                                 <DependencyConvergence/>
@@ -1569,6 +1571,31 @@
                     <version>${plugin.rat.version}</version>
                 </plugin>
 
+                <plugin>
+                    <groupId>com.qlangtech.tis</groupId>
+                    <artifactId>tisasm-maven-plugin</artifactId>
+                    <version>${tisasm-maven-plugin.version}</version>
+                    <configuration>
+                        <skip>${tisasm.oss.put.skip}</skip>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>make-assembly</id>
+                            <phase>none</phase>
+                            <goals>
+                                <goal>tisasm</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>make-deploy</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>put</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
             </plugins>
         </pluginManagement>
     </build>
@@ -1911,7 +1938,8 @@
                         <executions>
                             <execution>
                                 <id>verify.rat</id>
-                                <phase>verify</phase>
+                                <!--                                <phase>verify</phase>-->
+                                <phase>none</phase>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>

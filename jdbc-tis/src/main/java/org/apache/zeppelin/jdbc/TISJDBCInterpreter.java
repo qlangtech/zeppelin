@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.qlangtech.tis.TIS;
+import com.qlangtech.tis.manage.common.Config;
 import com.qlangtech.tis.plugin.ds.DBConfig;
 import com.qlangtech.tis.plugin.ds.DataSourceFactory;
 import com.qlangtech.tis.plugin.ds.DataSourceFactoryPluginStore;
@@ -97,17 +98,18 @@ public class TISJDBCInterpreter extends JDBCInterpreter {
             if (StringUtils.isEmpty(tisDbName)) {
                 throw new IllegalStateException("param tisDbName can not be null");
             }
-            DataSourceFactoryPluginStore dsStore = TIS.getDataBasePluginStore(new PostedDSProp(tisDbName));
+            DataSourceFactoryPluginStore dsStore = TIS.getDataSourceFactoryPluginStore(PostedDSProp.parse(tisDbName));
             DataSourceFactory dsFactory = dsStore.getPlugin();
-            Objects.requireNonNull(dsFactory, "dsFactory can not be null");
+
+            Objects.requireNonNull(dsFactory, "dbName:" + tisDbName + " relevant dsFactory can not be null,dataDir:" + Config.getDataDir().getAbsolutePath());
             List<String> jdbcUrls = Lists.newArrayList();
             DBConfig dbConfig = dsFactory.getDbConfig();
-            dbConfig.vistDbURL(true, (dbName, dbHost, jdbcUrl) -> {
+            dbConfig.vistDbURL(false, DBConfig.expireSec, (dbName, dbHost, jdbcUrl) -> {
                 jdbcUrls.add(jdbcUrl);
             }, false);
 
             for (String u : jdbcUrls) {
-                return dsFactory.getConnection(u, false);
+                return dsFactory.getConnection(u, false).getConnection();
             }
 
             throw new IllegalStateException("tisDbName:" + tisDbName + " can not create relevant Connection");

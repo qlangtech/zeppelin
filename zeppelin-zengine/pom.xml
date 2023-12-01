@@ -46,6 +46,13 @@
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>com.qlangtech.tis</groupId>
+      <artifactId>tis-builder-api</artifactId>
+      <version>${tis.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>zeppelin-common</artifactId>
