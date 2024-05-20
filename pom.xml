@@ -220,7 +220,7 @@
         <!-- to be able to exclude some tests using command line -->
         <tests.to.exclude/>
 
-        <tis.version>4.0.0-rc1</tis.version>
+        <tis.version>4.0.0</tis.version>
         <tisasm.oss.put.skip>true</tisasm.oss.put.skip>
         <tisasm-maven-plugin.version>1.0.6</tisasm-maven-plugin.version>
 
